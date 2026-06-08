@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuauLearn - Master Roblox Scripting</title>
+    
+    <!-- CDNs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fengari@0.1.4/dist/fengari.js"></script>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #ffffff; --bg-secondary: #f4f6f8; --bg-sidebar: #1e293b;
+            --text-primary: #0f172a; --text-secondary: #475569; --text-sidebar: #cbd5e1;
+            --text-sidebar-active: #ffffff; --accent: #10b981; --accent-hover: #059669;
+            --accent-light: #d1fae5; --danger: #ef4444; --warning: #f59e0b;
+            --code-bg: #1e1e1e; --code-text: #d4d4d4; --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); --card-bg: #ffffff;
+        }
+        [data-theme="dark"] {
+            --bg-primary: #0f172a; --bg-secondary: #1e293b; --bg-sidebar: #020617;
+            --text-primary: #f8fafc; --text-secondary: #94a3b8; --text-sidebar: #94a3b8;
+            --accent: #34d399; --accent-hover: #10b981; --accent-light: #064e3b;
+            --code-bg: #020617; --border: #334155; --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --card-bg: #1e293b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg-secondary); color: var(--text-primary); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s, color 0.3s; }
+        
+        /* AUTH MODAL */
+        .auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .auth-card { background: var(--card-bg); padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); border: 1px solid var(--border); }
+        .auth-card h2 { text-align: center; margin-bottom: 8px; color: var(--accent); }
+        .auth-card p.subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 24px; }
+        .auth-input { width: 100%; padding: 12px 16px; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; outline: none; transition: border 0.2s; }
+        .auth-input:focus { border-color: var(--accent); }
+        .auth-error { color: var(--danger); font-size: 0.85rem; text-align: center; margin-bottom: 16px; min-height: 20px; }
+        .auth-btns { display: flex; gap: 12px; }
+        .auth-btns .btn { flex: 1; }
+
+        .sidebar { width: 260px; background: var(--bg-sidebar); color: var(--text-sidebar); display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; transition: transform 0.3s; z-index: 100; }
+        .sidebar-logo { padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .sidebar-logo h1 { font-size: 1.5rem; color: var(--text-sidebar-active); font-weight: 800; }
+        .sidebar-logo span { color: var(--accent); }
+        .nav-item { padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 500; transition: all 0.2s; border-left: 3px solid transparent; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text-sidebar-active); }
+        .nav-item.active { background: rgba(16, 185, 129, 0.1); color: var(--accent); border-left-color: var(--accent); }
+        .sidebar-footer { margin-top: auto; padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .user-profile { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .avatar { width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .user-info p:first-child { color: var(--text-sidebar-active); font-weight: 600; }
+        .user-info p:last-child { font-size: 0.8rem; color: var(--accent); }
+        .btn-logout { width: 100%; padding: 8px; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-sidebar); border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .btn-logout:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); color: var(--danger); }
+
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .top-bar { height: 60px; background: var(--bg-primary); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; box-shadow: var(--shadow); z-index: 10; }
+        .top-bar-left { display: flex; align-items: center; gap: 20px; }
+        .menu-toggle { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+        .xp-display { display: flex; align-items: center; gap: 8px; background: var(--accent-light); color: var(--accent); padding: 6px 14px; border-radius: 20px; font-weight: 700; }
+        .theme-toggle { background: var(--bg-secondary); border: 1px solid var(--border); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-primary); transition: all 0.2s; }
+        .theme-toggle:hover { background: var(--accent-light); color: var(--accent); }
+        .content-area { flex: 1; overflow-y: auto; padding: 30px; }
+
+        .dashboard-header { margin-bottom: 30px; }
+        .dashboard-header h2 { font-size: 2rem; margin-bottom: 8px; }
+        .dashboard-header p { color: var(--text-secondary); }
+        .progress-card { background: var(--card-bg); border-radius: 12px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 30px; border: 1px solid var(--border); }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+        .progress-bar-bg { width: 100%; height: 12px; background: var(--bg-secondary); border-radius: 6px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #34d399); border-radius: 6px; transition: width 0.5s ease; }
+        .modules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .module-card { background: var(--card-bg); border-radius: 12px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s; }
+        .module-card:hover { transform: translateY(-4px); }
+        .module-card h4 { margin-bottom: 8px; }
+        .module-card p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px; }
+        .module-status { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .status-locked { background: var(--bg-secondary); color: var(--text-secondary); }
+        .status-active { background: var(--accent-light); color: var(--accent); }
+        .status-completed { background: #dbeafe; color: #2563eb; }
+        [data-theme="dark"] .status-completed { background: #1e3a8a; color: #93c5fd; }
+
+        .lesson-container, .quiz-container { max-width: 800px; margin: 0 auto; background: var(--card-bg); border-radius: 12px; padding: 40px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+        .lesson-header { margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+        .lesson-content { line-height: 1.7; margin-bottom: 30px; }
+        .lesson-content p { margin-bottom: 16px; }
+        .lesson-content strong { color: var(--accent); }
+        pre { background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; overflow-x: auto; margin: 20px 0; font-family: 'Fira Code', monospace; font-size: 0.95rem; line-height: 1.5; }
+        
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-secondary { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-block { width: 100%; }
+        .lesson-nav { display: flex; justify-content: space-between; margin-top: 30px; }
+
+        .quiz-question { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        .quiz-option { padding: 16px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
+        .quiz-option:hover { border-color: var(--accent); background: var(--accent-light); }
+        .quiz-option.selected { border-color: var(--accent); background: var(--accent-light); }
+        .quiz-option.correct { border-color: #10b981; background: #d1fae5; }
+        .quiz-option.incorrect { border-color: #ef4444; background: #fee2e2; }
+        [data-theme="dark"] .quiz-option.correct { background: #064e3b; }
+        [data-theme="dark"] .quiz-option.incorrect { background: #7f1d1d; }
+        .option-marker { width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .quiz-feedback { padding: 16px; border-radius: 8px; margin-bottom: 20px; display: none; }
+        .feedback-correct { background: #d1fae5; color: #065f46; display: block; }
+        .feedback-incorrect { background: #fee2e2; color: #991b1b; display: block; }
+
+        .playground-container { max-width: 1200px; margin: 0 auto; background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; height: calc(100vh - 120px); overflow: hidden; }
+        .playground-header { padding: 15px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .playground-body { flex: 1; display: flex; overflow: hidden; }
+        .editor-pane, .output-pane { flex: 1; display: flex; flex-direction: column; }
+        .editor-pane { border-right: 1px solid var(--border); }
+        .pane-header { padding: 10px 20px; background: var(--bg-secondary); font-weight: 600; font-size: 0.9rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        #monaco-container { flex: 1; width: 100%; }
+        #console-output { flex: 1; padding: 20px; background: var(--bg-primary); font-family: 'Fira Code', monospace; font-size: 0.95rem; overflow-y: auto; white-space: pre-wrap; }
+        .console-log { color: var(--text-primary); margin-bottom: 4px; }
+        .console-error { color: var(--danger); margin-bottom: 4px; }
+
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .menu-toggle { display: block; }
+            .playground-body { flex-direction: column; }
+            .editor-pane { border-right: none; border-bottom: 1px solid var(--border); height: 50%; }
+            .lesson-container, .quiz-container { padding: 20px; }
+        }
+        .hidden { display: none !important; }
+        .loading-spinner { border: 4px solid var(--bg-secondary); border-top: 4px solid var(--accent); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <!-- AUTHENTICATION MODAL -->
+    <div id="auth-modal" class="auth-overlay">
+        <div class="auth-card">
+            <h2>LuauLearn</h2>
+            <p class="subtitle">Sign in to sync your progress</p>
+            <input type="text" id="auth-user" class="auth-input" placeholder="Username" autocomplete="username">
+            <input type="password" id="auth-pass" class="auth-input" placeholder="Password" autocomplete="current-password">
+            <p id="auth-error" class="auth-error"></p>
+            <div class="auth-btns">
+                <button id="btn-login" class="btn btn-primary">Log In</button>
+                <button id="btn-signup" class="btn btn-secondary">Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP (Hidden until logged in) -->
+    <aside class="sidebar hidden" id="sidebar">
+        <div class="sidebar-logo"><h1>Luau<span>Learn</span></h1></div>
+        <nav>
+            <div class="nav-item active" data-view="dashboard"><span>📚</span> My Learning</div>
+            <div class="nav-item" data-view="playground"><span>💻</span> Code Playground</div>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="avatar" id="user-avatar">U</div>
+                <div class="user-info"><p id="user-display-name">User</p><p id="sidebar-xp">0 XP</p></div>
+            </div>
+            <button class="btn-logout" id="btn-logout">Log Out</button>
+        </div>
+    </aside>
+
+    <main class="main-content hidden" id="main-content">
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button class="menu-toggle" id="menu-toggle">☰</button>
+                <div class="xp-display"><span>⚡</span><span id="topbar-xp">0 XP</span></div>
+            </div>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle Dark Mode">🌙</button>
+        </header>
+
+        <div class="content-area" id="content-area">
+            <!-- DASHBOARD -->
+            <div id="view-dashboard" class="view">
+                <div class="dashboard-header"><h2>Learn Luau</h2><p>Master Roblox scripting from scratch. 21 interactive lessons.</p></div>
+                <div class="progress-card">
+                    <div class="progress-header"><h3>Course Progress</h3><span id="progress-percent">0%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width: 0%"></div></div>
+                </div>
+                <h3 style="margin-bottom: 16px;">Modules</h3>
+                <div class="modules-grid" id="modules-grid"></div>
+            </div>
+
+            <!-- LESSON -->
+            <div id="view-lesson" class="view hidden">
+                <div class="lesson-container">
+                    <div class="lesson-header"><h2 id="lesson-title"></h2><p id="lesson-module"></p></div>
+                    <div class="lesson-content" id="lesson-content"></div>
+                    <div class="lesson-nav">
+                        <button class="btn btn-secondary" id="btn-prev-lesson">← Previous</button>
+                        <button class="btn btn-primary" id="btn-next-lesson">Next →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUIZ -->
+            <div id="view-quiz" class="view hidden">
+                <div class="quiz-container">
+                    <div class="lesson-header"><h2 id="quiz-title"></h2><p>Test your knowledge to earn XP!</p></div>
+                    <div id="quiz-content">
+                        <p class="quiz-question" id="quiz-question"></p>
+                        <div class="quiz-options" id="quiz-options"></div>
+                        <div class="quiz-feedback" id="quiz-feedback"></div>
+                        <button class="btn btn-primary btn-block hidden" id="btn-submit-quiz">Check Answer</button>
+                        <button class="btn btn-primary btn-block hidden" id="btn-next-quiz">Continue →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PLAYGROUND -->
+            <div id="view-playground" class="view hidden">
+                <div class="playground-container">
+                    <div class="playground-header">
+                        <h3>Luau Playground <span style="font-size:0.8rem; color:var(--text-secondary); font-weight:normal;">(Powered by Fengari Lua VM)</span></h3>
+                        <button class="btn btn-primary" id="btn-run-code">▶ Run Code</button>
+                    </div>
+                    <div class="playground-body">
+                        <div class="editor-pane">
+                            <div class="pane-header">main.luau</div>
+                            <div id="monaco-container"></div>
+                        </div>
+                        <div class="output-pane">
+                            <div class="pane-header">Output Console <span id="exec-time" style="font-weight:normal;"></span></div>
+                            <div id="console-output"><span class="console-log">Ready. Click "Run Code" to execute.</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==========================================
+        // 1. FIREBASE CONFIGURATION
+        // ==========================================
+        // PASTE YOUR FIREBASE CONFIG HERE!
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ==========================================
+        // 2. COURSE DATA (21 Lessons)
+        // ==========================================
+        const courseData = [
+            {
+                id: 'mod1', title: 'Module 1: Luau Basics', description: 'Variables, data types, and your first scripts.',
+                lessons: [
+                    { id: 'l1', title: 'Hello World', content: `<p>Welcome to Luau! The <strong>print()</strong> function outputs text to the console.</p><pre>print("Hello, World!")</pre><p>Text inside quotes is called a <strong>string</strong>.</p>` },
+                    { id: 'l2', title: 'Variables', content: `<p>Variables store data. Use the <strong>local</strong> keyword to declare them.</p><pre>local playerName = "Alex"\nlocal score = 100\nprint(playerName)</pre><p>Always use <strong>local</strong> to prevent memory leaks and bugs.</p>` },
+                    { id: 'l3', title: 'Data Types', content: `<p>Luau has several basic data types:</p><pre>local text = "String"\nlocal num = 42\nlocal decimal = 3.14\nlocal isActive = true\nlocal nothing = nil</pre><p><strong>nil</strong> means the variable has no value.</p>` },
+                    { id: 'l4', title: 'Strings & Math', content: `<p>Combine strings using <strong>..</strong> (concatenation). Do math with standard operators.</p><pre>local name = "Steve"\nprint("Hi " .. name)\n\nlocal a = 10\nlocal b = 3\nprint(a + b) -- 13\nprint(a % b) -- 1 (modulo)</pre>` },
+                    { id: 'l5', title: 'Comments', content: `<p>Comments are ignored by the engine. Use them to explain your code.</p><pre>-- This is a single-line comment\n\n--[[ \n  This is a \n  multi-line comment \n--]]\nprint("Comments are useful!")</pre>` }
+                ],
+                quiz: { id: 'q1', title: 'Module 1 Quiz', questions: [
+                    { q: 'Which keyword declares a variable in Luau?', options: ['var', 'let', 'local', 'dim'], correct: 2 },
+                    { q: 'What does the ".." operator do?', options: ['Adds numbers', 'Concatenates strings', 'Subtracts', 'Multiplies'], correct: 1 }
+                ]}
+            },
+            {
+                id: 'mod2', title: 'Module 2: Control Flow', description: 'Make decisions and repeat actions with loops.',
+                lessons: [
+                    { id: 'l6', title: 'If Statements', content: `<p>Execute code conditionally using <strong>if</strong>, <strong>then</strong>, and <strong>end</strong>.</p><pre>local health = 50\nif health > 0 then\n    print("Alive")\nelse\n    print("Dead")\nend</pre>` },
+                    { id: 'l7', title: 'Logical Operators', content: `<p>Combine conditions using <strong>and</strong>, <strong>or</strong>, and <strong>not</strong>.</p><pre>local hasKey = true\nlocal doorLocked = true\n\nif hasKey and doorLocked then\n    print("Unlocked the door!")\nend</pre>` },
+                    { id: 'l8', title: 'While Loops', content: `<p>A <strong>while</strong> loop runs as long as its condition is true.</p><pre>local count = 1\nwhile count <= 3 do\n    print(count)\n    count = count + 1\nend</pre><p>Be careful not to create infinite loops!</p>` },
+                    { id: 'l9', title: 'Numeric For Loops', content: `<p>The numeric <strong>for</strong> loop runs a specific number of times.</p><pre>-- Starts at 1, ends at 5\nfor i = 1, 5 do\n    print("Step " .. i)\nend\n\n-- Count by 2: 2, 4, 6\nfor i = 2, 6, 2 do\n    print(i)\nend</pre>` },
+                    { id: 'l10', title: 'Repeat Until', content: `<p>A <strong>repeat</strong> loop runs at least once, and stops when the condition becomes true.</p><pre>local num = 1\nrepeat\n    print(num)\n    num = num + 1\nuntil num > 3</pre><p>Notice it doesn't use the <strong>do</strong> keyword.</p>` }
+                ],
+                quiz: { id: 'q2', title: 'Module 2 Quiz', questions: [
+                    { q: 'Which keyword closes an if block?', options: ['}', 'stop', 'end', 'close'], correct: 2 },
+                    { q: 'Which loop always runs at least once?', options: ['while', 'for', 'repeat', 'do'], correct: 2 }
+                ]}
+            },
+            {
+                id: 'mod3', title: 'Module 3: Functions', description: 'Write reusable blocks of code.',
+                lessons: [
+                    { id: 'l11', title: 'Basic Functions', content: `<p>Functions group code together. Define them with <strong>local function</strong>.</p><pre>local function sayHello()\n    print("Hello there!")\nend\n\nsayHello() -- Call the function</pre>` },
+                    { id: 'l12', title: 'Parameters', content: `<p>Pass data into functions using <strong>parameters</strong>.</p><pre>local function greet(name)\n    print("Hi, " .. name)\nend\n\ngreet("Alex")\ngreet("Sam")</pre>` },
+                    { id: 'l13', title: 'Return Values', content: `<p>Functions can send data back using the <strong>return</strong> keyword.</p><pre>local function add(a, b)\n    return a + b\nend\n\nlocal result = add(5, 10)\nprint(result) -- 15</pre>` },
+                    { id: 'l14', title: 'Scope', content: `<p><strong>Local</strong> variables only exist inside the block they were created in.</p><pre>local function test()\n    local secret = 123\nend\n\ntest()\nprint(secret) -- Error! 'secret' is nil here.</pre><p>Always keep your variables local to their required scope.</p>` }
+                ],
+                quiz: { id: 'q3', title: 'Module 3 Quiz', questions: [
+                    { q: 'How do you send a value back from a function?', options: ['send', 'output', 'return', 'yield'], correct: 2 },
+                    { q: 'What happens if you print a local variable outside its function?', options: ['It prints nil/error', 'It prints 0', 'It crashes Roblox', 'It prints the name'], correct: 0 }
+                ]}
+            },
+            {
+                id: 'mod4', title: 'Module 4: Tables', description: 'Master Luau\'s only data structure: the Table.',
+                lessons: [
+                    { id: 'l15', title: 'Arrays (Sequences)', content: `<p>Tables can act as ordered lists (arrays). Luau arrays are <strong>1-indexed</strong>!</p><pre>local fruits = {"Apple", "Banana", "Cherry"}\nprint(fruits[1]) -- Apple\nprint(#fruits)   -- 3 (Length)</pre>` },
+                    { id: 'l16', title: 'Dictionaries', content: `<p>Tables can also store key-value pairs (dictionaries).</p><pre>local player = {\n    name = "Alex",\n    level = 10,\n    isAdmin = false\n}\nprint(player.name)\nprint(player["level"])</pre>` },
+                    { id: 'l17', title: 'Table Methods', content: `<p>Use the <strong>table</strong> library to manipulate arrays.</p><pre>local inv = {"Sword"}\ntable.insert(inv, "Potion")\ntable.insert(inv, "Shield")\n\ntable.remove(inv, 1) -- Removes Sword\nprint(inv[1]) -- Potion</pre>` },
+                    { id: 'l18', title: 'Iterating Tables', content: `<p>Loop through tables using <strong>ipairs</strong> (arrays) or <strong>pairs</strong> (dictionaries).</p><pre>local colors = {"Red", "Blue"}\nfor i, color in ipairs(colors) do\n    print(i, color)\nend\n\nlocal stats = {hp=100, mp=50}\nfor key, val in pairs(stats) do\n    print(key .. ": " .. val)\nend</pre>` }
+                ],
+                quiz: { id: 'q4', title: 'Module 4 Quiz', questions: [
+                    { q: 'What index does the first item in a Luau array have?', options: ['0', '1', '-1', 'first'], correct: 1 },
+                    { q: 'Which function adds an item to an array?', options: ['array.add()', 'table.insert()', 'push()', 'append()'], correct: 1 }
+                ]}
+            },
+            {
+                id: 'mod5', title: 'Module 5: Roblox Basics', description: 'Apply Luau to the Roblox Engine.',
+                lessons: [
+                    { id: 'l19', title: 'The Workspace', content: `<p>In Roblox, the 3D world is stored in the <strong>workspace</strong> global variable.</p><pre>-- Accessing a part named "Coin"\nlocal coin = workspace.Coin\nprint(coin.Name)</pre><p>Everything in the 3D world is an <strong>Instance</strong>.</p>` },
+                    { id: 'l20', title: 'Properties & Methods', content: `<p>Instances have <strong>Properties</strong> (data) and <strong>Methods</strong> (actions).</p><pre>local part = workspace.MyPart\n\n-- Property\npart.BrickColor = BrickColor.new("Bright red")\n\n-- Method\npart:Destroy()</pre><p>Notice methods use a colon <strong>:</strong> instead of a dot.</p>` },
+                    { id: 'l21', title: 'Events', content: `<p>Events let you run code when something happens. Use <strong>:Connect()</strong>.</p><pre>local part = workspace.DangerZone\n\nlocal function onTouched(hit)\n    print(part.Name .. " was touched by " .. hit.Name)\nend\n\npart.Touched:Connect(onTouched)</pre><p>This is the foundation of all interactive Roblox games!</p>` }
+                ],
+                quiz: { id: 'q5', title: 'Module 5 Quiz', questions: [
+                    { q: 'What global variable holds the 3D world in Roblox?', options: ['game', 'world', 'workspace', 'engine'], correct: 2 },
+                    { q: 'Which symbol is used to call a Method on an Instance?', options: ['.', ':', '->', '::'], correct: 1 }
+                ]}
+            }
+        ];
+
+        // ==========================================
+        // 3. STATE & DATABASE LOGIC
+        // ==========================================
+        let state = { currentView: 'dashboard', currentModuleIndex: 0, currentLessonIndex: 0, currentQuizQuestion: 0, selectedOption: null, xp: 0, completedLessons: [], completedQuizzes: [] };
+        let currentUser = null;
+
+        // The "Username Hack": Firebase requires emails. We append a fake domain if they just type a username.
+        function formatAuthEmail(input) {
+            return input.includes('@') ? input.toLowerCase() : `${input.toLowerCase()}@luaulearn.app`;
+        }
+
+        function getDisplayUsername(email) {
+            return email.replace('@luaulearn.app', '');
+        }
+
+        // AUTH LISTENER
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('auth-modal').classList.add('hidden');
+                document.getElementById('sidebar').classList.remove('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                
+                document.getElementById('user-display-name').textContent = getDisplayUsername(user.email);
+                document.getElementById('user-avatar').textContent = getDisplayUsername(user.email).charAt(0).toUpperCase();
+                
+                await loadUserData();
+                renderDashboard();
+            } else {
+                currentUser = null;
+                document.getElementById('auth-modal').classList.remove('hidden');
+                document.getElementById('sidebar').classList.add('hidden');
+                document.getElementById('main-content').classList.add('hidden');
+            }
+        });
+
+        async function loadUserData() {
+            if (!currentUser) return;
+            try {
+                const doc = await db.collection('users').doc(currentUser.uid).get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    state.xp = data.xp || 0;
+                    state.completedLessons = data.completedLessons || [];
+                    state.completedQuizzes = data.completedQuizzes || [];
+                }
+                updateXPDisplay();
+            } catch (err) {
+                console.error("Error loading data:", err);
+            }
+        }
+
+        async function saveStateToCloud() {
+            if (!currentUser) return;
+            try {
+                await db.collection('users').doc(currentUser.uid).set({
+                    xp: state.xp,
+                    completedLessons: state.completedLessons,
+                    completedQuizzes: state.completedQuizzes
+                });
+            } catch (err) {
+                console.error("Error saving data:", err);
+            }
+        }
+
+        // ==========================================
+        // 4. UI RENDERING & LOGIC
+        // ==========================================
+        function switchView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const navItem = document.querySelector(`.nav-item[data-view="${viewName}"]`);
+            if (navItem) navItem.classList.add('active');
+            state.currentView = viewName;
+            document.getElementById('sidebar').classList.remove('open');
+            if (viewName === 'playground' && window.monacoEditor) window.monacoEditor.layout();
+        }
+
+        function renderDashboard() {
+            const grid = document.getElementById('modules-grid');
+            grid.innerHTML = '';
+            let totalItems = 0, completedItems = 0;
+
+            courseData.forEach((mod, mIndex) => {
+                totalItems += mod.lessons.length + 1;
+                const isLocked = mIndex > 0 && !state.completedQuizzes.includes(courseData[mIndex-1].quiz.id);
+                const isCompleted = state.completedQuizzes.includes(mod.quiz.id);
+                const completedInModule = mod.lessons.filter(l => state.completedLessons.includes(l.id)).length + (isCompleted ? 1 : 0);
+                completedItems += completedInModule;
+
+                let statusClass = 'status-locked', statusText = 'Locked';
+                if (isCompleted) { statusClass = 'status-completed'; statusText = 'Completed'; }
+                else if (!isLocked) { statusClass = 'status-active'; statusText = 'In Progress'; }
+
+                const card = document.createElement('div');
+                card.className = 'module-card';
+                if (!isLocked) card.onclick = () => startModule(mIndex);
+                else { card.style.opacity = '0.6'; card.style.cursor = 'not-allowed'; }
+
+                card.innerHTML = `<h4>${mod.title}</h4><p>${mod.description}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="module-status ${statusClass}">${statusText}</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">${completedInModule}/${mod.lessons.length + 1}</span>
+                    </div>`;
+                grid.appendChild(card);
+            });
+
+            const percent = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+            document.getElementById('progress-percent').textContent = `${percent}%`;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+        }
+
+        function startModule(mIndex) { state.currentModuleIndex = mIndex; state.currentLessonIndex = 0; renderLesson(); switchView('lesson'); }
+
+        function renderLesson() {
+            const mod = courseData[state.currentModuleIndex];
+            const lesson = mod.lessons[state.currentLessonIndex];
+            document.getElementById('lesson-title').textContent = lesson.title;
+            document.getElementById('lesson-module').textContent = mod.title;
+            document.getElementById('lesson-content').innerHTML = lesson.content;
+
+            if (!state.completedLessons.includes(lesson.id)) {
+                state.completedLessons.push(lesson.id);
+                state.xp += 10;
+                updateXPDisplay();
+                saveStateToCloud();
+            }
+
+            document.getElementById('btn-prev-lesson').style.visibility = (state.currentLessonIndex === 0 && state.currentModuleIndex === 0) ? 'hidden' : 'visible';
+            document.getElementById('btn-next-lesson').textContent = state.currentLessonIndex === mod.lessons.length - 1 ? 'Take Quiz →' : 'Next →';
+        }
+
+        function renderQuiz() {
+            const mod = courseData[state.currentModuleIndex];
+            const question = mod.quiz.questions[state.currentQuizQuestion];
+            document.getElementById('quiz-title').textContent = mod.quiz.title;
+            document.getElementById('quiz-question').textContent = `Q${state.currentQuizQuestion + 1}: ${question.q}`;
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            state.selectedOption = null;
+
+            question.options.forEach((opt, index) => {
+                const div = document.createElement('div');
+                div.className = 'quiz-option';
+                div.innerHTML = `<span class="option-marker">${String.fromCharCode(65 + index)}</span> <span>${opt}</span>`;
+                div.onclick = () => {
+                    if (document.getElementById('btn-submit-quiz').classList.contains('hidden')) return;
+                    document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+                    div.classList.add('selected');
+                    state.selectedOption = index;
+                };
+                optionsContainer.appendChild(div);
+            });
+
+            document.getElementById('quiz-feedback').className = 'quiz-feedback';
+            document.getElementById('btn-submit-quiz').classList.remove('hidden');
+            document.getElementById('btn-next-quiz').classList.add('hidden');
+        }
+
+        function checkAnswer() {
+            if (state.selectedOption === null) return;
+            const question = courseData[state.currentModuleIndex].quiz.questions[state.currentQuizQuestion];
+            const feedback = document.getElementById('quiz-feedback');
+            const options = document.querySelectorAll('.quiz-option');
+
+            options.forEach((opt, i) => {
+                opt.style.pointerEvents = 'none';
+                if (i === question.correct) opt.classList.add('correct');
+                if (i === state.selectedOption && i !== question.correct) opt.classList.add('incorrect');
+            });
+
+            if (state.selectedOption === question.correct) {
+                feedback.className = 'quiz-feedback feedback-correct';
+                feedback.textContent = '🎉 Correct!';
+                state.xp += 20;
+            } else {
+                feedback.className = 'quiz-feedback feedback-incorrect';
+                feedback.textContent = `❌ Incorrect. Answer: ${question.options[question.correct]}`;
+            }
+            updateXPDisplay();
+            document.getElementById('btn-submit-quiz').classList.add('hidden');
+            document.getElementById('btn-next-quiz').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            const mod = courseData[state.currentModuleIndex];
+            state.currentQuizQuestion++;
+            if (state.currentQuizQuestion >= mod.quiz.questions.length) {
+                if (!state.completedQuizzes.includes(mod.quiz.id)) {
+                    state.completedQuizzes.push(mod.quiz.id);
+                    state.xp += 50;
+                    updateXPDisplay();
+                    saveStateToCloud();
+                }
+                state.currentQuizQuestion = 0;
+                switchView('dashboard');
+                renderDashboard();
+            } else { renderQuiz(); }
+        }
+
+        function updateXPDisplay() {
+            document.getElementById('topbar-xp').textContent = `${state.xp} XP`;
+            document.getElementById('sidebar-xp').textContent = `${state.xp} XP`;
+        }
+
+        // ==========================================
+        // 5. FENGARI LUA VM EXECUTION
+        // ==========================================
+        function runCode() {
+            if (!window.fengari) { appendToConsole("Error: Lua VM is still loading.", true); return; }
+            const code = window.monacoEditor ? window.monacoEditor.getValue() : "";
+            clearConsole();
+            const startTime = performance.now();
+            const lua = fengari.lua, lauxlib = fengari.lauxlib, lualib = fengari.lualib;
+            let L = lauxlib.luaL_newstate();
+            lualib.luaL_openlibs(L);
+
+            lua.lua_pushcfunction(L, function(L) {
+                let nargs = lua.lua_gettop(L); let out = [];
+                for (let i = 1; i <= nargs; i++) {
+                    let str = lauxlib.luaL_tolstring(L, i, null);
+                    out.push(fengari.to_jsstring(str));
+                    lua.lua_pop(L, 1);
+                }
+                appendToConsole(out.join('\t')); return 0;
+            });
+            lua.lua_setglobal(L, fengari.to_luastring("print"));
+
+            let status = lauxlib.luaL_dostring(L, fengari.to_luastring(code));
+            if (status !== lua.LUA_OK) {
+                let err = lua.lua_tojsstring(L, -1);
+                appendToConsole(fengari.to_jsstring(err), true);
+            }
+            lua.lua_close(L);
+            document.getElementById('exec-time').textContent = `(${(performance.now() - startTime).toFixed(1)}ms)`;
+        }
+
+        function appendToConsole(text, isError = false) {
+            const output = document.getElementById('console-output');
+            const div = document.createElement('div');
+            div.className = isError ? 'console-error' : 'console-log';
+            div.textContent = text;
+            output.appendChild(div);
+            output.scrollTop = output.scrollHeight;
+        }
+        function clearConsole() { document.getElementById('console-output').innerHTML = ''; document.getElementById('exec-time').textContent = ''; }
+
+        // ==========================================
+        // 6. INITIALIZATION & EVENT LISTENERS
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme Setup
+            const themeToggle = document.getElementById('theme-toggle');
+            const savedTheme = localStorage.getItem('luauLearnTheme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+            themeToggle.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+                localStorage.setItem('luauLearnTheme', next);
+                if (window.monacoEditor) monaco.editor.setTheme(next === 'dark' ? 'vs-dark' : 'vs');
+            });
+
+            // Auth Buttons
+            document.getElementById('btn-signup').addEventListener('click', async () => {
+                const user = document.getElementById('auth-user').value.trim();
+                const pass = document.getElementById('auth-pass').value;
+                const errEl = document.getElementById('auth-error');
+                errEl.textContent = '';
+                if (!user || !pass) { errEl.textContent = 'Please fill in all fields.'; return; }
+                if (pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+                
+                try {
+                    await auth.createUserWithEmailAndPassword(formatAuthEmail(user), pass);
+                } catch (err) {
+                    errEl.textContent = err.message.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '');
+                }
+            });
+
+            document.getElementById('btn-login').addEventListener('click', async () => {
+                const user = document.getElementById('auth-user').value.trim();
+                const pass = document.getElementById('auth-pass').value;
+                const errEl = document.getElementById('auth-error');
+                errEl.textContent = '';
+                if (!user || !pass) { errEl.textContent = 'Please fill in all fields.'; return; }
+                
+                try {
+                    await auth.signInWithEmailAndPassword(formatAuthEmail(user), pass);
+                } catch (err) {
+                    errEl.textContent = 'Invalid username or password.';
+                }
+            });
+
+            document.getElementById('btn-logout').addEventListener('click', () => auth.signOut());
+
+            // Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const view = item.getAttribute('data-view');
+                    if (view === 'dashboard') renderDashboard();
+                    switchView(view);
+                });
+            });
+            document.getElementById('menu-toggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+
+            // Lesson/Quiz Nav
+            document.getElementById('btn-next-lesson').addEventListener('click', () => {
+                const mod = courseData[state.currentModuleIndex];
+                if (state.currentLessonIndex < mod.lessons.length - 1) { state.currentLessonIndex++; renderLesson(); }
+                else { switchView('quiz'); renderQuiz(); }
+            });
+            document.getElementById('btn-prev-lesson').addEventListener('click', () => {
+                if (state.currentLessonIndex > 0) { state.currentLessonIndex--; renderLesson(); }
+                else if (state.currentModuleIndex > 0) { state.currentModuleIndex--; state.currentLessonIndex = courseData[state.currentModuleIndex].lessons.length - 1; renderLesson(); }
+            });
+            document.getElementById('btn-submit-quiz').addEventListener('click', checkAnswer);
+            document.getElementById('btn-next-quiz').addEventListener('click', nextQuizQuestion);
+            document.getElementById('btn-run-code').addEventListener('click', runCode);
+
+            // Monaco Editor Setup
+            require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
+            require(['vs/editor/editor.main'], function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                window.monacoEditor = monaco.editor.create(document.getElementById('monaco-container'), {
+                    value: `-- Welcome to the Luau Playground!\n-- This runs real Lua code via Fengari VM.\n\nlocal function fibonacci(n)\n    if n <= 1 then return n end\n    return fibonacci(n - 1) + fibonacci(n - 2)\nend\n\nfor i = 1, 10 do\n    print("Fib(" .. i .. ") = " .. fibonacci(i))\nend`,
+                    language: 'lua',
+                    theme: currentTheme === 'dark' ? 'vs-dark' : 'vs',
+                    automaticLayout: true, minimap: { enabled: false }, fontSize: 14,
+                    fontFamily: "'Fira Code', Consolas, monospace", scrollBeyondLastLine: false, padding: { top: 15 }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
