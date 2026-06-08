@@ -12,7 +12,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
     <style>
-        /* --- THEMES --- */
         [data-theme="light"] {
             --bg-primary: #ffffff; --bg-secondary: #f4f6f8; --bg-sidebar: #1e293b;
             --text-primary: #0f172a; --text-secondary: #475569; --text-sidebar: #cbd5e1;
@@ -20,7 +19,6 @@
             --accent-light: #d1fae5; --danger: #ef4444; --warning: #f59e0b;
             --code-bg: #1e1e1e; --code-text: #d4d4d4; --border: #e2e8f0;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); --card-bg: #ffffff;
-            --monaco-theme: vs;
         }
         [data-theme="dark"] {
             --bg-primary: #0f172a; --bg-secondary: #1e293b; --bg-sidebar: #020617;
@@ -29,73 +27,73 @@
             --accent-light: #064e3b; --danger: #ef4444; --warning: #f59e0b;
             --code-bg: #020617; --code-text: #e2e8f0; --border: #334155;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); --card-bg: #1e293b;
-            --monaco-theme: vs-dark;
         }
         [data-theme="midnight"] {
             --bg-primary: #1a1b3a; --bg-secondary: #13142b; --bg-sidebar: #0a0b1f;
             --text-primary: #e0e7ff; --text-secondary: #a5b4fc; --text-sidebar: #a5b4fc;
             --text-sidebar-active: #ffffff; --accent: #818cf8; --accent-hover: #6366f1;
-            --accent-light: #312e81; --danger: #f87171; --warning: #fbbf24;
-            --code-bg: #0a0b1f; --code-text: #c7d2fe; --border: #3730a3;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.6); --card-bg: #1e1f47;
-            --monaco-theme: vs-dark;
+            --accent-light: #312e81; --danger: #f87171; --code-bg: #0a0b1f;
+            --code-text: #c7d2fe; --border: #3730a3; --shadow: 0 4px 6px -1px rgba(0,0,0,0.6);
+            --card-bg: #1e1f47;
         }
         [data-theme="forest"] {
             --bg-primary: #1a2e1a; --bg-secondary: #142414; --bg-sidebar: #0a170a;
             --text-primary: #dcfce7; --text-secondary: #86efac; --text-sidebar: #86efac;
             --text-sidebar-active: #ffffff; --accent: #22c55e; --accent-hover: #16a34a;
-            --accent-light: #14532d; --danger: #f87171; --warning: #fbbf24;
-            --code-bg: #0a170a; --code-text: #bbf7d0; --border: #166534;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.6); --card-bg: #1f3a1f;
-            --monaco-theme: vs-dark;
+            --accent-light: #14532d; --danger: #f87171; --code-bg: #0a170a;
+            --code-text: #bbf7d0; --border: #166534; --shadow: 0 4px 6px -1px rgba(0,0,0,0.6);
+            --card-bg: #1f3a1f;
         }
         [data-theme="sunset"] {
             --bg-primary: #2d1b2e; --bg-secondary: #231426; --bg-sidebar: #1a0f1c;
             --text-primary: #fde68a; --text-secondary: #fb923c; --text-sidebar: #fb923c;
             --text-sidebar-active: #fef3c7; --accent: #f97316; --accent-hover: #ea580c;
-            --accent-light: #7c2d12; --danger: #ef4444; --warning: #fbbf24;
-            --code-bg: #1a0f1c; --code-text: #fed7aa; --border: #9a3412;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.6); --card-bg: #3d2440;
-            --monaco-theme: vs-dark;
+            --accent-light: #7c2d12; --danger: #ef4444; --code-bg: #1a0f1c;
+            --code-text: #fed7aa; --border: #9a3412; --shadow: 0 4px 6px -1px rgba(0,0,0,0.6);
+            --card-bg: #3d2440;
         }
         [data-theme="monokai"] {
             --bg-primary: #272822; --bg-secondary: #1e1f1c; --bg-sidebar: #171812;
             --text-primary: #f8f8f2; --text-secondary: #a6e22e; --text-sidebar: #a6e22e;
             --text-sidebar-active: #ffffff; --accent: #f92672; --accent-hover: #e91e63;
-            --accent-light: #4a1529; --danger: #f92672; --warning: #e6db74;
-            --code-bg: #171812; --code-text: #f8f8f2; --border: #49483e;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.6); --card-bg: #3e3d32;
-            --monaco-theme: vs-dark;
+            --accent-light: #4a1529; --danger: #f92672; --code-bg: #171812;
+            --code-text: #f8f8f2; --border: #49483e; --shadow: 0 4px 6px -1px rgba(0,0,0,0.6);
+            --card-bg: #3e3d32;
         }
         [data-theme="dracula"] {
             --bg-primary: #282a36; --bg-secondary: #21222c; --bg-sidebar: #191a21;
             --text-primary: #f8f8f2; --text-secondary: #bd93f9; --text-sidebar: #bd93f9;
             --text-sidebar-active: #ffffff; --accent: #bd93f9; --accent-hover: #a472f3;
-            --accent-light: #3d2c5e; --danger: #ff5555; --warning: #f1fa8c;
-            --code-bg: #191a21; --code-text: #f8f8f2; --border: #44475a;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.6); --card-bg: #44475a;
-            --monaco-theme: vs-dark;
+            --accent-light: #3d2c5e; --danger: #ff5555; --code-bg: #191a21;
+            --code-text: #f8f8f2; --border: #44475a; --shadow: 0 4px 6px -1px rgba(0,0,0,0.6);
+            --card-bg: #44475a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg-secondary); color: var(--text-primary); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s, color 0.3s; }
         
-        /* AUTH MODAL */
-        .auth-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-        .auth-card { background: var(--card-bg); padding: 40px; border-radius: 16px; width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.4); border: 1px solid var(--border); }
-        .auth-card h2 { text-align: center; margin-bottom: 8px; color: var(--accent); font-size: 1.8rem; }
-        .auth-card p.subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem; }
-        .auth-input { width: 100%; padding: 12px 16px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; outline: none; transition: border 0.2s; }
-        .auth-input:focus { border-color: var(--accent); }
-        .auth-error { color: var(--danger); font-size: 0.85rem; text-align: center; margin-bottom: 12px; min-height: 20px; line-height: 1.4; }
-        .auth-error code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
-        .auth-btns { display: flex; gap: 12px; }
-        .auth-btns .btn { flex: 1; }
-        .auth-divider { text-align: center; margin: 16px 0; color: var(--text-secondary); font-size: 0.85rem; }
-        .auth-help { font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 16px; line-height: 1.5; }
-        .auth-help a { color: var(--accent); text-decoration: none; }
+        .auth-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .auth-card { background: var(--card-bg); padding: 48px 40px; border-radius: 20px; width: 100%; max-width: 420px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid var(--border); text-align: center; }
+        .auth-logo { font-size: 3rem; margin-bottom: 16px; }
+        .auth-card h1 { font-size: 2rem; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), var(--accent-hover)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .auth-card p.subtitle { color: var(--text-secondary); margin-bottom: 32px; line-height: 1.5; }
+        
+        .google-btn { width: 100%; padding: 14px 20px; background: white; color: #1f1f1f; border: 1px solid #dadce0; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.2s; margin-bottom: 12px; }
+        .google-btn:hover { background: #f8f9fa; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transform: translateY(-1px); }
+        .google-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .google-btn svg { flex-shrink: 0; }
+        
+        .auth-divider { display: flex; align-items: center; margin: 20px 0; color: var(--text-secondary); font-size: 0.85rem; }
+        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+        .auth-divider span { padding: 0 12px; }
+        
+        .guest-btn { width: 100%; padding: 12px 20px; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .guest-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+        
+        .auth-error { color: var(--danger); font-size: 0.85rem; margin-top: 12px; min-height: 20px; line-height: 1.4; }
+        .auth-help { font-size: 0.75rem; color: var(--text-secondary); margin-top: 20px; line-height: 1.5; }
+        .auth-help code { background: var(--bg-secondary); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
 
-        /* SIDEBAR */
         .sidebar { width: 260px; background: var(--bg-sidebar); color: var(--text-sidebar); display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; transition: transform 0.3s; z-index: 100; }
         .sidebar-logo { padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .sidebar-logo h1 { font-size: 1.5rem; color: var(--text-sidebar-active); font-weight: 800; }
@@ -104,14 +102,12 @@
         .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text-sidebar-active); }
         .nav-item.active { background: rgba(16, 185, 129, 0.1); color: var(--accent); border-left-color: var(--accent); }
         .sidebar-footer { margin-top: auto; padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .user-profile { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .avatar { width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; overflow: hidden; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
         .user-info p:first-child { color: var(--text-sidebar-active); font-weight: 600; }
         .user-info p:last-child { font-size: 0.8rem; color: var(--accent); }
-        .btn-logout { width: 100%; padding: 8px; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-sidebar); border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-        .btn-logout:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); color: var(--danger); }
 
-        /* MAIN */
         .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
         .top-bar { height: 60px; background: var(--bg-primary); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; box-shadow: var(--shadow); z-index: 10; }
         .top-bar-left { display: flex; align-items: center; gap: 20px; }
@@ -119,10 +115,9 @@
         .menu-toggle { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
         .xp-display { display: flex; align-items: center; gap: 8px; background: var(--accent-light); color: var(--accent); padding: 6px 14px; border-radius: 20px; font-weight: 700; }
         .icon-btn { background: var(--bg-secondary); border: 1px solid var(--border); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-primary); transition: all 0.2s; }
-        .icon-btn:hover { background: var(--accent-light); color: var(--accent); transform: rotate(15deg); }
+        .icon-btn:hover { background: var(--accent-light); color: var(--accent); transform: rotate(45deg); }
         .content-area { flex: 1; overflow-y: auto; padding: 30px; }
 
-        /* DASHBOARD */
         .dashboard-header { margin-bottom: 30px; }
         .dashboard-header h2 { font-size: 2rem; margin-bottom: 8px; }
         .dashboard-header p { color: var(--text-secondary); }
@@ -142,7 +137,6 @@
         .status-completed { background: #dbeafe; color: #2563eb; }
         [data-theme="dark"] .status-completed, [data-theme="midnight"] .status-completed, [data-theme="forest"] .status-completed, [data-theme="sunset"] .status-completed, [data-theme="monokai"] .status-completed, [data-theme="dracula"] .status-completed { background: #1e3a8a; color: #93c5fd; }
 
-        /* LESSON & QUIZ */
         .lesson-container, .quiz-container { max-width: 800px; margin: 0 auto; background: var(--card-bg); border-radius: 12px; padding: 40px; box-shadow: var(--shadow); border: 1px solid var(--border); }
         .lesson-header { margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
         .lesson-content { line-height: 1.7; margin-bottom: 30px; }
@@ -175,7 +169,6 @@
         .feedback-correct { background: #d1fae5; color: #065f46; display: block; }
         .feedback-incorrect { background: #fee2e2; color: #991b1b; display: block; }
 
-        /* PLAYGROUND */
         .playground-container { max-width: 1200px; margin: 0 auto; background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; height: calc(100vh - 120px); overflow: hidden; }
         .playground-header { padding: 15px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .playground-body { flex: 1; display: flex; overflow: hidden; }
@@ -187,7 +180,6 @@
         .console-log { color: var(--text-primary); margin-bottom: 4px; }
         .console-error { color: var(--danger); margin-bottom: 4px; }
 
-        /* SETTINGS MODAL */
         .settings-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
         .settings-overlay.active { display: flex; }
         .settings-card { background: var(--card-bg); border-radius: 16px; width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.4); border: 1px solid var(--border); }
@@ -222,10 +214,9 @@
             .editor-pane { border-right: none; border-bottom: 1px solid var(--border); height: 50%; }
             .lesson-container, .quiz-container { padding: 20px; }
             .themes-grid { grid-template-columns: repeat(2, 1fr); }
+            .auth-card { padding: 32px 24px; }
         }
         .hidden { display: none !important; }
-        .loading-spinner { border: 4px solid var(--bg-secondary); border-top: 4px solid var(--accent); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -233,18 +224,21 @@
     <!-- AUTH MODAL -->
     <div id="auth-modal" class="auth-overlay hidden">
         <div class="auth-card">
-            <h2>🎮 LuauLearn</h2>
-            <p class="subtitle">Master Roblox scripting</p>
-            <input type="text" id="auth-user" class="auth-input" placeholder="Username" autocomplete="username">
-            <input type="password" id="auth-pass" class="auth-input" placeholder="Password (min 6 chars)" autocomplete="current-password">
+            <div class="auth-logo">🎮</div>
+            <h1>LuauLearn</h1>
+            <p class="subtitle">Master Roblox scripting with 36 interactive lessons</p>
+            
+            <button id="btn-google" class="google-btn">
+                <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
+                Sign in with Google
+            </button>
+            
+            <div class="auth-divider"><span>or</span></div>
+            
+            <button id="btn-guest" class="guest-btn">Continue as Guest</button>
+            
             <p id="auth-error" class="auth-error"></p>
-            <div class="auth-btns">
-                <button id="btn-login" class="btn btn-primary">Log In</button>
-                <button id="btn-signup" class="btn btn-secondary">Sign Up</button>
-            </div>
-            <div class="auth-divider">— or —</div>
-            <button id="btn-guest" class="btn btn-secondary btn-block">Continue as Guest</button>
-            <p class="auth-help">First time? <strong>Sign Up</strong> to create an account. Guest mode saves progress locally only.</p>
+            <p class="auth-help">By signing in, you agree to sync your progress across devices.<br>Guest progress is saved on this device only.</p>
         </div>
     </div>
 
@@ -263,12 +257,12 @@
                 <div class="settings-section">
                     <h3>👤 Account</h3>
                     <div class="account-info">
-                        <p>Logged in as: <strong id="settings-username">—</strong></p>
+                        <p>Signed in as: <strong id="settings-username">—</strong></p>
                         <p>Account type: <strong id="settings-account-type">—</strong></p>
                     </div>
                     <div class="settings-actions">
                         <button class="btn btn-secondary btn-block" id="btn-reset-progress">🔄 Reset All Progress</button>
-                        <button class="btn btn-danger btn-block" id="btn-settings-logout">🚪 Log Out</button>
+                        <button class="btn btn-danger btn-block" id="btn-settings-logout">🚪 Sign Out</button>
                     </div>
                 </div>
             </div>
@@ -306,7 +300,6 @@
         </header>
 
         <div class="content-area" id="content-area">
-            <!-- DASHBOARD -->
             <div id="view-dashboard" class="view">
                 <div class="dashboard-header"><h2>Learn Luau</h2><p>Master Roblox scripting from scratch. 36 interactive lessons.</p></div>
                 <div class="progress-card">
@@ -317,7 +310,6 @@
                 <div class="modules-grid" id="modules-grid"></div>
             </div>
 
-            <!-- LESSON -->
             <div id="view-lesson" class="view hidden">
                 <div class="lesson-container">
                     <div class="lesson-header"><h2 id="lesson-title"></h2><p id="lesson-module"></p></div>
@@ -329,7 +321,6 @@
                 </div>
             </div>
 
-            <!-- QUIZ -->
             <div id="view-quiz" class="view hidden">
                 <div class="quiz-container">
                     <div class="lesson-header"><h2 id="quiz-title"></h2><p>Test your knowledge to earn XP!</p></div>
@@ -343,7 +334,6 @@
                 </div>
             </div>
 
-            <!-- PLAYGROUND -->
             <div id="view-playground" class="view hidden">
                 <div class="playground-container">
                     <div class="playground-header">
@@ -379,12 +369,14 @@
         };
 
         let firebaseReady = false;
-        let auth = null, db = null;
+        let auth = null, db = null, googleProvider = null;
         try {
             if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
                 firebase.initializeApp(firebaseConfig);
                 auth = firebase.auth();
                 db = firebase.firestore();
+                googleProvider = new firebase.auth.GoogleAuthProvider();
+                googleProvider.setCustomParameters({ prompt: 'select_account' });
                 firebaseReady = true;
             }
         } catch (e) { console.error("Firebase init failed:", e); }
@@ -501,9 +493,9 @@
             },
             { id: 'mod6', title: 'Module 6: Metatables & OOP', emoji: '🧬', description: 'Advanced Luau patterns.',
                 lessons: [
-                    { id: 'l22', title: 'What are Metatables?', content: `<p>Metatables let you change how tables behave. Set one with <strong>setmetatable()</strong>.</p><pre>local t = {}\nlocal mt = {}\nsetmetatable(t, mt)\nprint(getmetatable(t) == mt) -- true</pre><p>The magic happens with <strong>metamethods</strong> (special keys like __index).</p>` },
-                    { id: 'l23', title: '__index Metamethod', content: `<p>When you access a missing key, Lua checks __index.</p><pre>local defaults = {hp = 100, speed = 16}\nlocal player = setmetatable({}, {\n    __index = defaults\n})\nprint(player.hp) -- 100 (from defaults!)</pre><p>This is the foundation of OOP in Luau.</p>` },
-                    { id: 'l24', title: 'Operator Metamethods', content: `<p>Override operators like <strong>+</strong>, <strong>==</strong>, <strong>..</strong>.</p><pre>local vec = {}\nvec.__add = function(a, b)\n    return {x = a.x + b.x, y = a.y + b.y}\nend\n\nlocal v1 = setmetatable({x=1,y=2}, vec)\nlocal v2 = setmetatable({x=3,y=4}, vec)\nlocal v3 = v1 + v2 -- {x=4, y=6}</pre>` },
+                    { id: 'l22', title: 'What are Metatables?', content: `<p>Metatables let you change how tables behave.</p><pre>local t = {}\nlocal mt = {}\nsetmetatable(t, mt)\nprint(getmetatable(t) == mt) -- true</pre>` },
+                    { id: 'l23', title: '__index Metamethod', content: `<pre>local defaults = {hp = 100, speed = 16}\nlocal player = setmetatable({}, {\n    __index = defaults\n})\nprint(player.hp) -- 100 (from defaults!)</pre>` },
+                    { id: 'l24', title: 'Operator Metamethods', content: `<pre>local vec = {}\nvec.__add = function(a, b)\n    return {x = a.x + b.x, y = a.y + b.y}\nend\nlocal v1 = setmetatable({x=1,y=2}, vec)\nlocal v2 = setmetatable({x=3,y=4}, vec)\nlocal v3 = v1 + v2 -- {x=4, y=6}</pre>` },
                     { id: 'l25', title: 'Creating Classes', content: `<pre>local Player = {}\nPlayer.__index = Player\n\nfunction Player.new(name)\n    local self = setmetatable({}, Player)\n    self.name = name\n    self.hp = 100\n    return self\nend\n\nfunction Player:greet()\n    print("Hi, I'm " .. self.name)\nend\n\nlocal p = Player.new("Alex")\np:greet()</pre>` },
                     { id: 'l26', title: 'Inheritance', content: `<pre>local Animal = {}\nAnimal.__index = Animal\nfunction Animal.new(name)\n    return setmetatable({name=name}, Animal)\nend\nfunction Animal:speak() print("...") end\n\nlocal Dog = setmetatable({}, {__index = Animal})\nDog.__index = Dog\nfunction Dog.new(name)\n    local self = Animal.new(name)\n    return setmetatable(self, Dog)\nend\nfunction Dog:speak() print("Woof!") end</pre>` }
                 ],
@@ -514,11 +506,11 @@
             },
             { id: 'mod7', title: 'Module 7: Advanced Roblox', emoji: '🚀', description: 'Client-server, data, animations.',
                 lessons: [
-                    { id: 'l27', title: 'RemoteEvents', content: `<p>Used for client-server communication.</p><pre>-- Server Script\nlocal event = game.ReplicatedStorage.MyEvent\nevent.OnServerEvent:Connect(function(player, data)\n    print(player.Name .. " sent: " .. data)\nend)\n\n-- LocalScript (client)\nlocal event = game.ReplicatedStorage.MyEvent\nevent:FireServer("Hello!")</pre><p>NEVER trust client data - always validate on server!</p>` },
-                    { id: 'l28', title: 'RemoteFunctions', content: `<p>Unlike RemoteEvents, these <strong>wait for a return value</strong>.</p><pre>-- Server\nlocal rf = Instance.new("RemoteFunction")\nrf.OnServerInvoke = function(player, x)\n    return x * 2\nend\n\n-- Client\nlocal result = rf:InvokeServer(5)\nprint(result) -- 10</pre><p>Use sparingly - they block the thread!</p>` },
-                    { id: 'l29', title: 'ModuleScripts', content: `<p>Share code between scripts using <strong>require()</strong>.</p><pre>-- ModuleScript (in ReplicatedStorage)\nlocal Utils = {}\nfunction Utils.add(a, b) return a + b end\nreturn Utils\n\n-- Server/Client Script\nlocal Utils = require(game.ReplicatedStorage.Utils)\nprint(Utils.add(2, 3)) -- 5</pre><p>ModuleScripts only run once - their result is cached.</p>` },
-                    { id: 'l30', title: 'TweenService', content: `<p>Smoothly animate properties.</p><pre>local TweenService = game:GetService("TweenService")\nlocal part = workspace.Part\n\nlocal tweenInfo = TweenInfo.new(\n    2,                  -- duration\n    Enum.EasingStyle.Quad,\n    Enum.EasingDirection.Out\n)\n\nlocal tween = TweenService:Create(\n    part, tweenInfo,\n    {Size = Vector3.new(10,10,10)}\n)\ntween:Play()</pre>` },
-                    { id: 'l31', title: 'DataStores', content: `<p>Save player data permanently!</p><pre>local DataStoreService = game:GetService("DataStoreService")\nlocal coinsStore = DataStoreService:GetDataStore("Coins")\n\ngame.Players.PlayerAdded:Connect(function(player)\n    local ok, coins = pcall(function()\n        return coinsStore:GetAsync(player.UserId)\n    end)\n    print(player.Name .. " has " .. (coins or 0) .. " coins")\nend)</pre><p>Always use <strong>pcall()</strong> with DataStores - they can fail!</p>` }
+                    { id: 'l27', title: 'RemoteEvents', content: `<pre>-- Server Script\nlocal event = game.ReplicatedStorage.MyEvent\nevent.OnServerEvent:Connect(function(player, data)\n    print(player.Name .. " sent: " .. data)\nend)\n\n-- LocalScript (client)\nlocal event = game.ReplicatedStorage.MyEvent\nevent:FireServer("Hello!")</pre>` },
+                    { id: 'l28', title: 'RemoteFunctions', content: `<pre>-- Server\nlocal rf = Instance.new("RemoteFunction")\nrf.OnServerInvoke = function(player, x)\n    return x * 2\nend\n\n-- Client\nlocal result = rf:InvokeServer(5)\nprint(result) -- 10</pre>` },
+                    { id: 'l29', title: 'ModuleScripts', content: `<pre>-- ModuleScript (in ReplicatedStorage)\nlocal Utils = {}\nfunction Utils.add(a, b) return a + b end\nreturn Utils\n\n-- Server/Client Script\nlocal Utils = require(game.ReplicatedStorage.Utils)\nprint(Utils.add(2, 3)) -- 5</pre>` },
+                    { id: 'l30', title: 'TweenService', content: `<pre>local TweenService = game:GetService("TweenService")\nlocal part = workspace.Part\n\nlocal tweenInfo = TweenInfo.new(\n    2, Enum.EasingStyle.Quad,\n    Enum.EasingDirection.Out\n)\n\nlocal tween = TweenService:Create(\n    part, tweenInfo,\n    {Size = Vector3.new(10,10,10)}\n)\ntween:Play()</pre>` },
+                    { id: 'l31', title: 'DataStores', content: `<pre>local DataStoreService = game:GetService("DataStoreService")\nlocal coinsStore = DataStoreService:GetDataStore("Coins")\n\ngame.Players.PlayerAdded:Connect(function(player)\n    local ok, coins = pcall(function()\n        return coinsStore:GetAsync(player.UserId)\n    end)\n    print(player.Name .. " has " .. (coins or 0))\nend)</pre><p>Always use <strong>pcall()</strong> with DataStores!</p>` }
                 ],
                 quiz: { id: 'q7', title: 'Module 7 Quiz', questions: [
                     { q: 'How to send data client→server?', options: ['FireServer()', 'FireClient()', 'InvokeServer()', 'Send()'], correct: 0 },
@@ -527,11 +519,11 @@
             },
             { id: 'mod8', title: 'Module 8: Game Systems', emoji: '🏆', description: 'Build real game features.',
                 lessons: [
-                    { id: 'l32', title: 'Leaderstats', content: `<p>Create the in-game scoreboard.</p><pre>game.Players.PlayerAdded:Connect(function(player)\n    local stats = Instance.new("Folder")\n    stats.Name = "leaderstats"\n    stats.Parent = player\n    \n    local coins = Instance.new("IntValue")\n    coins.Name = "Coins"\n    coins.Value = 0\n    coins.Parent = stats\nend)</pre><p>The folder MUST be named "leaderstats" (lowercase) to work!</p>` },
-                    { id: 'l33', title: 'Tool Systems', content: `<p>Make a working tool that damages on touch.</p><pre>local tool = script.Parent\nlocal damage = 25\n\ntool.Activated:Connect(function()\n    tool.Handle.Touched:Connect(function(hit)\n        local hum = hit.Parent:FindFirstChild("Humanoid")\n        if hum then hum:TakeDamage(damage) end\n    end)\nend)</pre>` },
-                    { id: 'l34', title: 'GUI Programming', content: `<p>Create interactive UIs.</p><pre>local player = game.Players.LocalPlayer\nlocal gui = player.PlayerGui.ScreenGui\nlocal button = gui.TextButton\n\nbutton.MouseButton1Click:Connect(function()\n    print("Clicked!")\n    button.Text = "Thanks!"\n    task.wait(1)\n    button.Text = "Click Me"\nend)</pre><p>GUI scripts must be <strong>LocalScripts</strong>!</p>` },
-                    { id: 'l35', title: 'Sound & Effects', content: `<pre>local sound = Instance.new("Sound")\nsound.SoundId = "rbxassetid://123456789"\nsound.Parent = workspace\nsound:Play()\n\n-- Particle effects\nlocal particles = Instance.new("ParticleEmitter")\nparticles.Parent = workspace.Part\nparticles.Rate = 50\nparticles.Lifetime = NumberRange.new(1, 2)</pre>` },
-                    { id: 'l36', title: 'Game Loops', content: `<p>A complete round-based game loop.</p><pre>local function gameLoop()\n    while true do\n        -- Intermission\n        for i = 10, 1, -1 do\n            print("Starting in " .. i)\n            task.wait(1)\n        end\n        \n        -- Round\n        print("Round started!")\n        task.wait(60)\n        \n        -- End\n        print("Round over!")\n        task.wait(5)\n    end\nend\n\ntask.spawn(gameLoop)</pre><p><strong>task.wait()</strong> is the modern replacement for wait().</p>` }
+                    { id: 'l32', title: 'Leaderstats', content: `<pre>game.Players.PlayerAdded:Connect(function(player)\n    local stats = Instance.new("Folder")\n    stats.Name = "leaderstats"\n    stats.Parent = player\n    \n    local coins = Instance.new("IntValue")\n    coins.Name = "Coins"\n    coins.Value = 0\n    coins.Parent = stats\nend)</pre><p>Folder MUST be named "leaderstats"!</p>` },
+                    { id: 'l33', title: 'Tool Systems', content: `<pre>local tool = script.Parent\nlocal damage = 25\n\ntool.Activated:Connect(function()\n    tool.Handle.Touched:Connect(function(hit)\n        local hum = hit.Parent:FindFirstChild("Humanoid")\n        if hum then hum:TakeDamage(damage) end\n    end)\nend)</pre>` },
+                    { id: 'l34', title: 'GUI Programming', content: `<pre>local player = game.Players.LocalPlayer\nlocal gui = player.PlayerGui.ScreenGui\nlocal button = gui.TextButton\n\nbutton.MouseButton1Click:Connect(function()\n    print("Clicked!")\n    button.Text = "Thanks!"\n    task.wait(1)\n    button.Text = "Click Me"\nend)</pre>` },
+                    { id: 'l35', title: 'Sound & Effects', content: `<pre>local sound = Instance.new("Sound")\nsound.SoundId = "rbxassetid://123456789"\nsound.Parent = workspace\nsound:Play()\n\nlocal particles = Instance.new("ParticleEmitter")\nparticles.Parent = workspace.Part\nparticles.Rate = 50</pre>` },
+                    { id: 'l36', title: 'Game Loops', content: `<pre>local function gameLoop()\n    while true do\n        for i = 10, 1, -1 do\n            print("Starting in " .. i)\n            task.wait(1)\n        end\n        print("Round started!")\n        task.wait(60)\n        print("Round over!")\n        task.wait(5)\n    end\nend\n\ntask.spawn(gameLoop)</pre><p><strong>task.wait()</strong> is the modern wait().</p>` }
                 ],
                 quiz: { id: 'q8', title: 'Module 8 Quiz', questions: [
                     { q: 'Folder name for scoreboards?', options: ['stats', 'leaderstats', 'scores', 'playerstats'], correct: 1 },
@@ -547,15 +539,6 @@
         let currentUser = null;
         let isGuestMode = false;
 
-        function formatAuthEmail(input) {
-            const clean = input.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
-            return clean.includes('@') ? clean : `${clean}@luaulearn.app`;
-        }
-        function getDisplayUsername(email) {
-            if (!email) return 'Guest';
-            return email.replace('@luaulearn.app', '');
-        }
-
         function showError(msg) {
             document.getElementById('auth-error').innerHTML = msg;
         }
@@ -566,10 +549,21 @@
                     currentUser = user;
                     isGuestMode = false;
                     hideAuth();
-                    document.getElementById('user-display-name').textContent = getDisplayUsername(user.email);
-                    document.getElementById('user-avatar').textContent = getDisplayUsername(user.email).charAt(0).toUpperCase();
-                    document.getElementById('settings-username').textContent = getDisplayUsername(user.email);
-                    document.getElementById('settings-account-type').textContent = 'Cloud-synced';
+                    
+                    const name = user.displayName || user.email?.split('@')[0] || 'User';
+                    const photo = user.photoURL;
+                    
+                    document.getElementById('user-display-name').textContent = name;
+                    const avatarEl = document.getElementById('user-avatar');
+                    if (photo) {
+                        avatarEl.innerHTML = `<img src="${photo}" alt="${name}">`;
+                    } else {
+                        avatarEl.innerHTML = name.charAt(0).toUpperCase();
+                    }
+                    
+                    document.getElementById('settings-username').textContent = name;
+                    document.getElementById('settings-account-type').textContent = 'Cloud-synced (Google)';
+                    
                     await loadUserData();
                     renderDashboard();
                 } else if (!isGuestMode) {
@@ -611,6 +605,7 @@
                     state.xp = data.xp || 0;
                     state.completedLessons = data.completedLessons || [];
                     state.completedQuizzes = data.completedQuizzes || [];
+                    if (data.theme) applyTheme(data.theme);
                 }
                 updateXPDisplay();
             } catch (err) {
@@ -631,23 +626,26 @@
                     xp: state.xp,
                     completedLessons: state.completedLessons,
                     completedQuizzes: state.completedQuizzes,
-                    theme: localStorage.getItem('luauLearnTheme') || 'dark'
-                });
+                    theme: localStorage.getItem('luauLearnTheme') || 'dark',
+                    lastActive: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
             } catch (err) { console.error("Save error:", err); }
         }
 
-        function translateFirebaseError(code) {
+        function translateAuthError(code) {
             const errors = {
-                'auth/invalid-email': 'Invalid username format.',
-                'auth/user-not-found': 'No account with that username.',
-                'auth/wrong-password': 'Incorrect password.',
-                'auth/invalid-credential': 'Invalid username or password.',
-                'auth/email-already-in-use': 'That username is taken.',
-                'auth/weak-password': 'Password must be at least 6 characters.',
-                'auth/network-request-failed': 'Network error. Check your internet.',
-                'auth/unauthorized-domain': `⚠️ <strong>Domain not authorized!</strong><br>Add <code>${window.location.hostname}</code> to Firebase Console → Authentication → Settings → Authorized Domains.`
+                'auth/popup-closed-by-user': 'Sign-in cancelled.',
+                'auth/cancelled-popup-request': 'Sign-in cancelled.',
+                'auth/popup-blocked': 'Popup blocked. Please allow popups for this site.',
+                'auth/network-request-failed': 'Network error. Check your connection.',
+                'auth/unauthorized-domain': `⚠️ <strong>Domain not authorized!</strong><br>Add <code>${window.location.hostname}</code> to Firebase Console → Authentication → Settings → Authorized Domains.`,
+                'auth/operation-not-allowed': 'Google Sign-In not enabled. Enable it in Firebase Console → Authentication → Sign-in method.',
+                'auth/account-exists-with-different-credential': 'An account already exists with the same email using a different sign-in method.',
+                'auth/internal-error': 'Internal error. Try again.',
+                'auth/invalid-api-key': 'Invalid Firebase config. Check your API key.',
+                'auth/invalid-oauth-client-id': 'Invalid OAuth client. Check Firebase Google Sign-In setup.'
             };
-            return errors[code] || code;
+            return errors[code] || `Error: ${code}`;
         }
 
         // ==========================================
@@ -827,55 +825,44 @@
         // INIT
         // ==========================================
         document.addEventListener('DOMContentLoaded', () => {
-            // Load saved theme
             const savedTheme = localStorage.getItem('luauLearnTheme') || 'dark';
             applyTheme(savedTheme);
 
-            // If Firebase not configured, show auth with warning
             if (!firebaseReady) {
                 showAuth();
-                showError('⚠️ Firebase not configured. Use Guest mode or set up Firebase.');
+                showError('⚠️ Firebase not configured. Use Guest mode or add your Firebase config.');
             }
 
-            // Auth handlers
-            document.getElementById('btn-signup').addEventListener('click', async () => {
-                const user = document.getElementById('auth-user').value.trim();
-                const pass = document.getElementById('auth-pass').value;
+            // GOOGLE SIGN-IN
+            document.getElementById('btn-google').addEventListener('click', async () => {
+                const btn = document.getElementById('btn-google');
                 showError('');
-                if (!user || !pass) return showError('Please fill in all fields.');
-                if (pass.length < 6) return showError('Password must be at least 6 characters.');
-                if (!firebaseReady) return showError('Firebase not configured. Use Guest mode.');
+                
+                if (!firebaseReady) {
+                    showError('Firebase not configured. Use Guest mode or add your Firebase config to the code.');
+                    return;
+                }
+                
+                btn.disabled = true;
+                btn.innerHTML = '<span>Signing in...</span>';
+                
                 try {
-                    document.getElementById('btn-signup').disabled = true;
-                    await auth.createUserWithEmailAndPassword(formatAuthEmail(user), pass);
+                    await auth.signInWithPopup(googleProvider);
+                    // Success handled by onAuthStateChanged
                 } catch (err) {
-                    showError(translateFirebaseError(err.code) || err.message);
-                } finally {
-                    document.getElementById('btn-signup').disabled = false;
+                    console.error("Auth error:", err);
+                    showError(translateAuthError(err.code) || err.message);
+                    btn.disabled = false;
+                    btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg> Sign in with Google`;
                 }
             });
 
-            document.getElementById('btn-login').addEventListener('click', async () => {
-                const user = document.getElementById('auth-user').value.trim();
-                const pass = document.getElementById('auth-pass').value;
-                showError('');
-                if (!user || !pass) return showError('Please fill in all fields.');
-                if (!firebaseReady) return showError('Firebase not configured. Use Guest mode.');
-                try {
-                    document.getElementById('btn-login').disabled = true;
-                    await auth.signInWithEmailAndPassword(formatAuthEmail(user), pass);
-                } catch (err) {
-                    showError(translateFirebaseError(err.code) || err.message);
-                } finally {
-                    document.getElementById('btn-login').disabled = false;
-                }
-            });
-
+            // GUEST MODE
             document.getElementById('btn-guest').addEventListener('click', () => {
                 isGuestMode = true;
                 showError('');
                 document.getElementById('user-display-name').textContent = 'Guest';
-                document.getElementById('user-avatar').textContent = 'G';
+                document.getElementById('user-avatar').innerHTML = 'G';
                 document.getElementById('settings-username').textContent = 'Guest';
                 document.getElementById('settings-account-type').textContent = 'Local only (not synced)';
                 hideAuth();
@@ -883,7 +870,7 @@
                 renderDashboard();
             });
 
-            // Settings
+            // SETTINGS
             document.getElementById('btn-settings').addEventListener('click', () => {
                 renderThemesGrid();
                 document.getElementById('settings-modal').classList.add('active');
@@ -900,6 +887,7 @@
                 updateXPDisplay();
                 await saveStateToCloud();
                 renderDashboard();
+                document.getElementById('settings-modal').classList.remove('active');
                 alert('Progress reset!');
             });
 
@@ -909,7 +897,7 @@
                 else { isGuestMode = false; showAuth(); }
             });
 
-            // Navigation
+            // NAVIGATION
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const view = item.getAttribute('data-view');
@@ -932,7 +920,7 @@
             document.getElementById('btn-next-quiz').addEventListener('click', nextQuizQuestion);
             document.getElementById('btn-run-code').addEventListener('click', runCode);
 
-            // Monaco
+            // MONACO
             require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
             require(['vs/editor/editor.main'], function() {
                 const currentTheme = localStorage.getItem('luauLearnTheme') || 'dark';
